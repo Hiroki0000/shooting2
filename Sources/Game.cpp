@@ -16,6 +16,7 @@ Vector2 cannonPos;      //!< 砲台の位置
 Vector2 bulletPos;      //!< 弾の位置
 Rect    targetRect;     //!< ターゲットの矩形
 int     score;          //!< スコア
+Rect outsideRect;       //!< 画面右端の判定位置
 
 
 // ゲーム開始時に呼ばれる関数です。
@@ -38,12 +39,17 @@ void Update()
 
     // 弾の移動
     if (bulletPos.x > -999) {
-        bulletPos.x += 10 * Time::deltaTime;
+        bulletPos.x += 200 * Time::deltaTime;
 
         // ターゲットと弾の当たり判定
         Rect bulletRect(bulletPos, Vector2(32, 20));
         if (targetRect.Overlaps(bulletRect)) {
             score += 1;         // スコアの加算
+            bulletPos.x = -999; // 弾を発射可能な状態に戻す
+        }
+        //ターゲットが画面右の外に出たときの処理
+        if (outsideRect.Overlaps(bulletRect)) {
+            
             bulletPos.x = -999; // 弾を発射可能な状態に戻す
         }
     }
